@@ -1,0 +1,62 @@
+﻿<Page
+    x:Class="Audio_Pipes.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Audio_Pipes"
+    xmlns:dev="using:Windows.Devices.Enumeration"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid Height="48" VerticalAlignment="Top" Background="{ThemeResource AppBarBackground}">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+                <TextBlock Margin="14" FontWeight="Bold">AUDIO PIPES</TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <AppBarButton Name="About" Height="48" Width="48" Icon="Help" Click="About_Click" ToolTipService.ToolTip="About Audio Pipes"/>
+                <AppBarSeparator/>
+                <AppBarToggleButton Name="EnableAll" Height="48" Width="48" Icon="Accept" Click="EnableAll_Click" ToolTipService.ToolTip="Enable All Pipes"/>
+                <AppBarButton Name="RefreshDevices" Height="48" Width="48" Icon="Refresh" Click="RefreshDevices_Click" ToolTipService.ToolTip="Refresh Devices"/>
+                <AppBarSeparator/>
+                <AppBarButton Name="OpenConfig" Height="48" Width="48" Icon="OpenFile" Click="OpenConfig_Click" ToolTipService.ToolTip="Open Config File"/>
+                <AppBarButton Name="SaveConfig" Height="48" Width="48" Icon="Save" Click="SaveConfig_Click" ToolTipService.ToolTip="Save Config File"/>
+                <AppBarSeparator/>
+                <AppBarButton Name="AddPipe" Height="48" Width="48" Icon="Add" Click="AddPipe_Click" ToolTipService.ToolTip="Add Pipe"/>
+            </StackPanel>
+        </Grid>
+        <GridView Name="AudioPipesGridView" Margin="0,48,0,0" SelectionMode="None" Padding="10">
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Background="{ThemeResource AppBarBackground}" Width="400" Height="200" Padding="10" Margin="10">
+                        <StackPanel>
+                            <Grid>
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox Name="EnabledCheckbox" Content="Enabled" HorizontalAlignment="Left" VerticalAlignment="Top" IsChecked="{Binding IsEnabled, Mode=TwoWay}" Tag="{Binding}" Click="EnabledCheckbox_Click"/>
+                                    <TextBlock Name="Timer" Text="{Binding TimerState}" Padding="10,5"/>
+                                </StackPanel>
+                                <Button Name="CloseButton" Content="&#xE711;" HorizontalAlignment="Right" Click="CloseButton_Click" Tag="{Binding}" Background="{ThemeResource AppBarBackground}" Foreground="Red" FontFamily="Segoe MDL2 Assets"/>
+                            </Grid>
+                            <StackPanel HorizontalAlignment="Left">
+                                <TextBlock Text="From Microphone/File (Input)" Margin="0,5,0,5"/>
+                                <Grid Height="32" Width="380">
+                                    <Button Name="OpenInputFile" Click="OpenInputFile_Click" Content="&#xE8B7;" Background="{ThemeResource AppBarBackground}" Tag="{Binding}" IsEnabled="{Binding IsDisabled}" FontFamily="Segoe MDL2 Assets" Height="32" Width="48" HorizontalAlignment="Right"/>
+                                    <TextBox Name="InputFileName" Width="332" Text="{Binding SelectedInputFile.DisplayName}" HorizontalAlignment="Left" Padding="10,5" IsEnabled="{Binding IsDisabled}" />
+                                    <ComboBox Name="InputDevices" Width="332" ItemsSource="{Binding InputDevices, Mode=TwoWay}" SelectedValue="{Binding SelectedInputDevice, Mode=TwoWay}" DisplayMemberPath="Name" IsEnabled="{Binding IsDisabled}" HorizontalAlignment="Left" Background="Transparent"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel HorizontalAlignment="Left">
+                                <TextBlock Text="To Speaker/File (Output)" Margin="0,5,0,5"/>
+                                <Grid Height="32" Width="380">
+                                    <Button Name="OpenOutputFile" Click="OpenOutputFile_Click" Content="&#xE8B7;" Background="{ThemeResource AppBarBackground}" Tag="{Binding}" IsEnabled="{Binding IsDisabled}" FontFamily="Segoe MDL2 Assets" Height="32" Width="48" HorizontalAlignment="Right"/>
+                                    <TextBox Name="OutputFileName" Width="332" Text="{Binding SelectedOutputFile.DisplayName}" HorizontalAlignment="Left" IsEnabled="{Binding IsDisabled}" />
+                                    <ComboBox Name="OutputDevices" Width="332" ItemsSource="{Binding OutputDevices, Mode=TwoWay}" SelectedValue="{Binding SelectedOutputDevice, Mode=TwoWay}" DisplayMemberPath="Name" IsEnabled="{Binding IsDisabled}" HorizontalAlignment="Left" Background="Transparent"/>
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+    </Grid>
+</Page>
