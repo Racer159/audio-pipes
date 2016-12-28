@@ -25,6 +25,7 @@ namespace Audio_Pipes.Models
         public DispatcherTimer Timer = new DispatcherTimer();
 
         public string _timerState;
+
         private int _seconds = 0;
         private int _minutes = 0;
         private int _hours = 0;
@@ -35,6 +36,11 @@ namespace Audio_Pipes.Models
         private StorageFile _selectedInputFile;
         private ObservableCollection<DeviceInformation> _outputDevices;
         private ObservableCollection<DeviceInformation> _inputDevices;
+        private double _gain;
+        private AudioDeviceInputNode _deviceInputNode;
+        private AudioFileInputNode _fileInputNode;
+        private string _selectedEffect = "None";
+        private ObservableCollection<string> _effects = new ObservableCollection<string> { "None", "Echo", "Reverb", "Limiter" };
 
         public AudioPipe(ObservableCollection<DeviceInformation> outputDevices, ObservableCollection<DeviceInformation> inputDevices)
         {
@@ -174,6 +180,65 @@ namespace Audio_Pipes.Models
             {
                 _inputDevices = value;
                 NotifyPropertyChanged("InputDevices");
+            }
+        }
+
+        [DataMember]
+        public double Gain
+        {
+            get { return _gain; }
+            set
+            {
+                _gain = value;
+                NotifyPropertyChanged("Gain");
+            }
+        }
+
+        [DataMember]
+        public AudioDeviceInputNode DeviceInputNode
+        {
+            get { return _deviceInputNode; }
+            set
+            {
+                _deviceInputNode = value;
+                _fileInputNode = null;
+                NotifyPropertyChanged("DeviceInputNode");
+                NotifyPropertyChanged("FileInputNode");
+            }
+        }
+
+        [DataMember]
+        public AudioFileInputNode FileInputNode
+        {
+            get { return _fileInputNode; }
+            set
+            {
+                _fileInputNode = value;
+                _deviceInputNode = null;
+                NotifyPropertyChanged("DeviceInputNode");
+                NotifyPropertyChanged("FileInputNode");
+            }
+        }
+
+        [DataMember]
+        public string SelectedEffect
+        {
+            get { return _selectedEffect; }
+            set
+            {
+                _selectedEffect = value;
+                NotifyPropertyChanged("SelectedEffect");
+            }
+        }
+
+        [DataMember]
+        public ObservableCollection<string> Effects
+        {
+            get { return _effects; }
+            set
+            {
+                _effects = value;
+                NotifyPropertyChanged("Effects");
             }
         }
     }

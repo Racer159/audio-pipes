@@ -19,7 +19,7 @@
         </Grid>
         <ScrollViewer Margin="0,48,0,0" MaxWidth="800" VerticalScrollBarVisibility="Hidden">
             <StackPanel>
-                <TextBlock FontSize="16" FontWeight="Bold" Margin="5,10,5,5">AUDIO PIPES v1.0.0</TextBlock>
+                <TextBlock FontSize="16" FontWeight="Bold" Margin="5,10,5,5">AUDIO PIPES v1.1.0</TextBlock>
                 <TextBlock FontSize="16" FontStyle="Italic" Margin="5">Created By: Racer159</TextBlock>
                 <TextBlock TextWrapping="WrapWholeWords" Margin="5">This application allows audio devices and files to be connected together with pipes in order to enable a wide variety of audio setups.  Below is a description of the app's functions:</TextBlock>
                 <TextBlock TextWrapping="WrapWholeWords" Margin="15,5,5,5"><Bold FontFamily="Segoe MDL2 Assets">&#xE710;</Bold> - Adds an audio pipe into the current scene.</TextBlock>

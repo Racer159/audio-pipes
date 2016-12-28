@@ -28,7 +28,7 @@
         <GridView Name="AudioPipesGridView" Margin="0,48,0,0" SelectionMode="None" Padding="10">
             <GridView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Background="{ThemeResource AppBarBackground}" Width="400" Height="200" Padding="10" Margin="10">
+                    <Grid Background="{ThemeResource AppBarBackground}" Width="400" Height="300" Padding="10" Margin="10">
                         <StackPanel>
                             <Grid>
                                 <StackPanel Orientation="Horizontal">
@@ -52,6 +52,16 @@
                                     <TextBox Name="OutputFileName" Width="332" Text="{Binding SelectedOutputFile.DisplayName}" HorizontalAlignment="Left" IsEnabled="{Binding IsDisabled}" />
                                     <ComboBox Name="OutputDevices" Width="332" ItemsSource="{Binding OutputDevices, Mode=TwoWay}" SelectedValue="{Binding SelectedOutputDevice, Mode=TwoWay}" DisplayMemberPath="Name" IsEnabled="{Binding IsDisabled}" HorizontalAlignment="Left" Background="Transparent"/>
                                 </Grid>
+                            </StackPanel>
+                            <StackPanel HorizontalAlignment="Left">
+                                <TextBlock Text="Effects" Margin="0,5,0,5"/>
+                                <Grid Height="32" Width="380">
+                                    <ComboBox Name="EffectsCombo" Width="380" ItemsSource="{Binding Effects, Mode=TwoWay}" SelectedValue="{Binding SelectedEffect, Mode=TwoWay}" IsEnabled="{Binding IsDisabled}" HorizontalAlignment="Left" Background="Transparent"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel HorizontalAlignment="Left" Width="380">
+                                <TextBlock Text="Gain (dB)" Margin="0,5,0,5"/>
+                                <Slider Name="GainSlider" Tag="{Binding}" Width="332" HorizontalAlignment="Center" ValueChanged="GainSlider_ValueChanged" Value="{Binding Gain, Mode=TwoWay}" Maximum="30" Minimum="-30" StepFrequency="0.5"/>
                             </StackPanel>
                         </StackPanel>
                     </Grid>

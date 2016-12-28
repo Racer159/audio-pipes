@@ -17,12 +17,10 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
-
 namespace Audio_Pipes
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Main page to setup audio device linking.
     /// </summary>
     public sealed partial class MainPage : Page
     {
@@ -147,6 +145,9 @@ namespace Audio_Pipes
                         }
 
                         deviceInputNode = deviceInputNodeResult.DeviceInputNode;
+                        deviceInputNode.OutgoingGain = Math.Pow(10, pipe.Gain / 10);
+
+                        pipe.DeviceInputNode = deviceInputNode;
                     }
                     else
                     {
@@ -159,6 +160,9 @@ namespace Audio_Pipes
                         }
 
                         fileInputNode = fileInputNodeResult.FileInputNode;
+                        fileInputNode.OutgoingGain = Math.Pow(10, pipe.Gain / 10);
+
+                        pipe.FileInputNode = fileInputNode;
                     }
 
                     if (deviceOutputNode != null && deviceInputNode != null)
@@ -174,12 +178,25 @@ namespace Audio_Pipes
                     else if (deviceOutputNode != null && fileInputNode != null)
                     {
                         try { fileInputNode.AddOutgoingConnection(deviceOutputNode); }
-                        catch { await new Windows.UI.Popups.MessageDialog("Unable to connect audio file to device: encoding mismatch. Please try again.").ShowAsync(); return false; }
+                        catch (Exception e) { await new Windows.UI.Popups.MessageDialog("Unable to connect audio file to device: encoding mismatch. Please try again.").ShowAsync(); return false; }
                     }
                     else
                     {
                         await new Windows.UI.Popups.MessageDialog("Sorry, but you can't play a file into a file.").ShowAsync();
                         return false;
+                    }
+
+                    if (fileInputNode != null)
+                    {
+                        if (pipe.SelectedEffect == "Reverb") { fileInputNode.EffectDefinitions.Add(CreateReverbEffect(pipe.Graph)); }
+                        else if (pipe.SelectedEffect == "Echo") { fileInputNode.EffectDefinitions.Add(CreateEchoEffect(pipe.Graph)); }
+                        else if (pipe.SelectedEffect == "Limiter") { fileInputNode.EffectDefinitions.Add(CreateLimiterEffect(pipe.Graph)); }
+                    }
+                    else if (deviceInputNode != null)
+                    {
+                        if (pipe.SelectedEffect == "Reverb") { deviceInputNode.EffectDefinitions.Add(CreateReverbEffect(pipe.Graph)); }
+                        else if (pipe.SelectedEffect == "Echo") { deviceInputNode.EffectDefinitions.Add(CreateEchoEffect(pipe.Graph)); }
+                        else if (pipe.SelectedEffect == "Limiter") { deviceInputNode.EffectDefinitions.Add(CreateLimiterEffect(pipe.Graph)); }
                     }
 
                     pipe.Graph.Start();
@@ -400,6 +417,65 @@ namespace Audio_Pipes
                     }
                 }
             }
+        }
+
+        private void GainSlider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
+        {
+            if (sender is Slider)
+            {
+                AudioPipe pipe = (AudioPipe)((Slider)sender).Tag;
+                if (pipe != null)
+                {
+                    if (pipe.DeviceInputNode != null && pipe.IsEnabled)
+                    {
+                        pipe.DeviceInputNode.OutgoingGain = Math.Pow(10, pipe.Gain / 10);
+                    }
+                    else if (pipe.FileInputNode != null && pipe.IsEnabled)
+                    {
+                        pipe.FileInputNode.OutgoingGain = Math.Pow(10, pipe.Gain / 10);
+                    }
+                }
+            }
+        }
+
+        private EchoEffectDefinition CreateEchoEffect(AudioGraph graph)
+        {
+            EchoEffectDefinition echoEffectDefinition = new EchoEffectDefinition(graph);
+
+            // See the MSDN page for parameter explanations
+            // http://msdn.microsoft.com/en-us/library/windows/desktop/microsoft.directx_sdk.xapofx.fxecho_parameters(v=vs.85).aspx
+            echoEffectDefinition.WetDryMix = 0.7f;
+            echoEffectDefinition.Feedback = 0.5f;
+            echoEffectDefinition.Delay = 500.0f;
+
+            return echoEffectDefinition;
+        }
+
+        private ReverbEffectDefinition CreateReverbEffect(AudioGraph graph)
+        {
+            // Create reverb effect
+            ReverbEffectDefinition reverbEffectDefinition = new ReverbEffectDefinition(graph);
+
+            // See the MSDN page for parameter explanations
+            // https://msdn.microsoft.com/en-us/library/windows/desktop/microsoft.directx_sdk.xaudio2.xaudio2fx_reverb_parameters(v=vs.85).aspx
+            reverbEffectDefinition.WetDryMix = 50;
+            reverbEffectDefinition.ReflectionsDelay = 120;
+            reverbEffectDefinition.ReverbDelay = 30;
+            reverbEffectDefinition.RearDelay = 3;
+            reverbEffectDefinition.DecayTime = 2;
+
+            return reverbEffectDefinition;
+        }
+
+        private LimiterEffectDefinition CreateLimiterEffect(AudioGraph graph)
+        {
+            // Create limiter effect
+            LimiterEffectDefinition limiterEffectDefinition = new LimiterEffectDefinition(graph);
+
+            limiterEffectDefinition.Loudness = 1000;
+            limiterEffectDefinition.Release = 10;
+
+            return limiterEffectDefinition;
         }
     }
 }

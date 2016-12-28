@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" IgnorableNamespaces="uap mp uap3">
-  <Identity Name="46641Racer159.AudioPipes" Publisher="CN=0ACADE03-8597-4AC8-B866-95CDFC3B98D2" Version="1.1.0.0" />
+  <Identity Name="46641Racer159.AudioPipes" Publisher="CN=0ACADE03-8597-4AC8-B866-95CDFC3B98D2" Version="1.1.1.0" />
   <mp:PhoneIdentity PhoneProductId="84d259f8-15a9-43ee-bca4-de98ca339542" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Audio Pipes</DisplayName>
@@ -21,6 +21,11 @@
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
       <Extensions>
+        <Extension Category="windows.backgroundTasks" EntryPoint="Audio_Pipes.App">
+          <BackgroundTasks>
+            <Task Type="audio" />
+          </BackgroundTasks>
+        </Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
           <uap:FileTypeAssociation Name="pipes">
             <uap:DisplayName>Audio Pipes Scene</uap:DisplayName>
@@ -31,11 +36,6 @@
             </uap:SupportedFileTypes>
           </uap:FileTypeAssociation>
         </uap:Extension>
-        <Extension Category="windows.backgroundTasks" EntryPoint="Audio_Pipes.App">
-          <BackgroundTasks>
-            <Task Type="audio" />
-          </BackgroundTasks>
-        </Extension>
       </Extensions>
     </Application>
   </Applications>

@@ -18,6 +18,10 @@ namespace Audio_Pipes.Models
         public string SelectedOutputDeviceId;
         [DataMember]
         public string SelectedOutputFilePath;
+        [DataMember]
+        public double Gain;
+        [DataMember]
+        public string Effect;
 
         public ConfigurationPipe() { }
 
@@ -27,6 +31,18 @@ namespace Audio_Pipes.Models
             SelectedInputFilePath = InFile;
             SelectedOutputDeviceId = OutDev;
             SelectedOutputFilePath = OutFile;
+            Gain = 0;
+            Effect = "None";
+        }
+
+        public ConfigurationPipe(string InDev, string InFile, string OutDev, string OutFile, double GainDB, string SelEffect)
+        {
+            SelectedInputDeviceId = InDev;
+            SelectedInputFilePath = InFile;
+            SelectedOutputDeviceId = OutDev;
+            SelectedOutputFilePath = OutFile;
+            Gain = GainDB;
+            Effect = SelEffect;
         }
     }
 }

@@ -49,7 +49,7 @@ namespace Audio_Pipes.Models
                     pipe.SelectedInputDevice != null ? pipe.SelectedInputDevice.Id : null, 
                     pipe.SelectedInputFile != null ? pipe.SelectedInputFile.Path : null,
                     pipe.SelectedOutputDevice != null ? pipe.SelectedOutputDevice.Id : null,
-                    pipe.SelectedOutputFile != null ? pipe.SelectedOutputFile.Path : null);
+                    pipe.SelectedOutputFile != null ? pipe.SelectedOutputFile.Path : null, pipe.Gain, pipe.SelectedEffect);
 
                 configPipes.Add(cpipe);
             }
@@ -114,6 +114,9 @@ namespace Audio_Pipes.Models
                         pipe.SelectedOutputFile = await StorageApplicationPermissions.FutureAccessList.GetFileAsync(token);
                     } else { success = false; }
                 }
+
+                pipe.Gain = cpipe.Gain;
+                pipe.SelectedEffect = cpipe.Effect;
 
                 audioPipes.Add(pipe);
             }
